@@ -2,8 +2,8 @@
 Preventing teleports and triggers activation by *_noclipping players_*.
 
 ## Commands:
-  - **!blocktp** - *_Toggle command to enable/disable blocking of teleports and triggers when you are **not** in noclip mode._*
-  - **!unblocktp** - *_Toggle command to enable/disable blocking of teleports and triggers when you are **not** in noclip mode._*
+  - **!blocktp** - *_Toggle command to enable/disable blocking of teleports and triggers when you are **not** in noclip mode (**ROOT FLAG**)._*
+  - **!unblocktp** - *_Toggle command to enable/disable blocking of teleports and triggers when you are **not** in noclip mode (**ROOT FLAG**)._*
  
 ## Cvars
   - `sm_tss_enabled` `1` - *_Enabled or disabled [1/0]._*
