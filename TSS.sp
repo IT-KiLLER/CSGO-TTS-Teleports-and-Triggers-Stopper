@@ -19,7 +19,6 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-char classname[][]={"trigger_teleport", "trigger_multiple"};
 bool blockTeleport[MAXPLAYERS+1] = {false,...};
 float msgtime[MAXPLAYERS+1];
 ConVar sm_tss_enabled;
@@ -29,7 +28,7 @@ public Plugin myinfo =
 	name = "[CS:GO] TTS - Teleports and Triggers Stopper.", // name-credit to LoKoO
 	author = "IT-KiLLER",
 	description = "Preventing teleports and triggers activation by noclipping players.",
-	version = "1.0",
+	version = "1.1",
 	url = "https://github.com/it-killer"
 };
 
@@ -38,26 +37,11 @@ public void OnPluginStart()
 	sm_tss_enabled = CreateConVar("sm_tss_enabled", "1.0", "Plugin is enabled or disabled.", _, true, 0.0, true, 1.0);
 	RegAdminCmd("sm_blocktp", Command_Blocktp, ADMFLAG_ROOT, "Toggle command to enable/disable blocking of teleports and triggers when you are not in noclip mode.");
 	RegAdminCmd("sm_unblocktp", Command_Blocktp, ADMFLAG_ROOT, "Toggle command to enable/disable blocking of teleports and triggers when you are not in noclip mode.");
-	HookEvent("round_start", Event_RoundStart, EventHookMode_PostNoCopy);
-	sm_tss_enabled.AddChangeHook(OnConVarChange);
 }
 
 public void OnClientDisconnect_Post(int client)
 {
 	blockTeleport[client] = false;
-}
-
-public void OnConVarChange(Handle cvar, const char[] oldValue, const char[] newValue)
-{
-	if (StrEqual(oldValue, newValue)) return;
-	int entity = INVALID_ENT_REFERENCE;
-	for(int i=0; i < sizeof(classname); i++)
-		while ((entity = FindEntityByClassname(entity, classname[i])) != INVALID_ENT_REFERENCE) {
-			if(sm_tss_enabled.BoolValue)
-				Hookentity(entity);
-			else
-				Unhookentity(entity);
-		}
 }
 
 public Action Command_Blocktp(int client, int args)
@@ -73,26 +57,15 @@ public Action Command_Blocktp(int client, int args)
 	return Plugin_Handled;
 }
 
-public void Event_RoundStart(Event event, const char[] name, bool dontbroadcast)
-{
-	if(!sm_tss_enabled.BoolValue) return;
-	int entity = INVALID_ENT_REFERENCE;
-	for(int i=0; i < sizeof(classname); i++)
-		while ((entity = FindEntityByClassname(entity, classname[i])) != INVALID_ENT_REFERENCE) {
-			Hookentity(entity);
-		}
+public void OnEntityCreated(int entity, const char[] classname) {
+	if(classname[0] == 't' ? StrEqual(classname, "trigger_teleport") || StrEqual(classname, "trigger_multiple") || StrEqual(classname, "trigger_once") : false)
+		Hookentity(entity);
 }
 
 stock void Hookentity(int entity){
 	if (!IsValidEntity(entity) || !IsValidEdict(entity)) return;
 	SDKHook(entity, SDKHook_Touch, onStartTouch);
 	SDKHook(entity, SDKHook_EndTouch, onStartTouch);
-}
-
-stock void Unhookentity(int entity){
-	if (!IsValidEntity(entity) || !IsValidEdict(entity)) return;
-	SDKUnhook(entity, SDKHook_Touch, onStartTouch);
-	SDKUnhook(entity, SDKHook_EndTouch, onStartTouch);
 }
 
 public Action onStartTouch(int entity, int client)
