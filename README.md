@@ -1,4 +1,4 @@
-# [CS:GO] TTS - Teleports and Triggers Stopper 1.1
+# [CS:GO] TTS - Teleports and Triggers Stopper 1.2
 Preventing teleports and triggers activation by *_noclipping players_*.
 
 ## Commands:
@@ -17,6 +17,9 @@ Supports the classes: `trigger_teleport`, `trigger_multiple` and `trigger_once`.
 Please feel free to contact me if you have any questions. If you have any suggestions for improvement or want a custom build, please contact me. I'm open to everything. [Contact information here.](https://github.com/IT-KiLLER/HOW-TO-CONTACT-ME)
 
 ## Change log
+- **1.2** - 2017-09-05
+  - Added another hook.
+  - Thanks to Snowy @ GFL for reporting a bug. It has been resolved.
 - **1.1** - 2017-09-04
   - Changed a bit.
   - Support `trigger_once` now.
