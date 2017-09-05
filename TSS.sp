@@ -28,7 +28,7 @@ public Plugin myinfo =
 	name = "[CS:GO] TTS - Teleports and Triggers Stopper.", // name-credit to LoKoO
 	author = "IT-KiLLER",
 	description = "Preventing teleports and triggers activation by noclipping players.",
-	version = "1.1",
+	version = "1.2",
 	url = "https://github.com/it-killer"
 };
 
@@ -58,19 +58,16 @@ public Action Command_Blocktp(int client, int args)
 }
 
 public void OnEntityCreated(int entity, const char[] classname) {
-	if(classname[0] == 't' ? StrEqual(classname, "trigger_teleport") || StrEqual(classname, "trigger_multiple") || StrEqual(classname, "trigger_once") : false)
-		Hookentity(entity);
-}
-
-stock void Hookentity(int entity){
-	if (!IsValidEntity(entity) || !IsValidEdict(entity)) return;
-	SDKHook(entity, SDKHook_Touch, onStartTouch);
-	SDKHook(entity, SDKHook_EndTouch, onStartTouch);
+	if(classname[0] == 't' ? (StrEqual(classname, "trigger_teleport", false) || StrEqual(classname, "trigger_multiple", false) || StrEqual(classname, "trigger_once", false) ) : false)	{
+		SDKHook(entity, SDKHook_StartTouch, onStartTouch);
+		SDKHook(entity, SDKHook_Touch, onStartTouch);
+		SDKHook(entity, SDKHook_EndTouch, onStartTouch);
+	}
 }
 
 public Action onStartTouch(int entity, int client)
 {
-	if (!IsValidEntity(entity) || !(1 <= client <= MaxClients) || !sm_tss_enabled.BoolValue) return Plugin_Continue;
+	if (!(1 <= client <= MaxClients) || !sm_tss_enabled.BoolValue) return Plugin_Continue;
 	if(GetEntityMoveType(client) != MOVETYPE_NOCLIP && !blockTeleport[client]) return Plugin_Continue;
 
 	if((msgtime[client] + 4.0) < GetGameTime()) {
